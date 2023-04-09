@@ -1,41 +1,20 @@
-const Movie = require('../models/movie.model');
-const Show = require('../models/show.model');
+const express = require('express');
+const router = express.Router();
+const movieController = require('../controllers/movie.controller');
 
-// Find all movies by status
-exports.findAllMovies = (req, res) => {
-  const status = req.query.status;
-  Movie.find({ status: status }, (err, movies) => {
-    if (err) {
-      return res.status(500).send({ message: err.message });
-    }
-    res.status(200).send(movies);
-  });
-};
+// GET /api/movies
+router.get('/movies', movieController.findAllMovies);
 
-// Find one movie by id
-exports.findOne = (req, res) => {
-  const id = req.params.id;
-  Movie.findById(id, (err, movie) => {
-    if (err) {
-      return res.status(500).send({ message: err.message });
-    }
-    if (!movie) {
-      return res.status(404).send({ message: 'Movie not found' });
-    }
-    res.status(200).send(movie);
-  });
-};
+// GET /api/movies?status=PUBLISHED
+router.get('/movies?status=PUBLISHED', movieController.findAllPublishedMovies);
 
-// Find all shows for a specific movie
-exports.findShows = (req, res) => {
-  const id = req.params.id;
-  Show.find({ movieId: id }, (err, shows) => {
-    if (err) {
-      return res.status(500).send({ message: err.message });
-    }
-    if (!shows) {
-      return res.status(404).send({ message: 'Shows not found' });
-    }
-    res.status(200).send(shows);
-  });
-};
+// GET /api/movies?status=RELEASED
+router.get('/movies?status=RELEASED', movieController.findAllReleasedMovies);
+
+// GET /api/movies/{movieId}
+router.get('/movies/:movieId', movieController.findOne);
+
+// GET /api/movies?status=RELEASED&title={title}&genres={genres}&artists={artists}&start_date={startdate}&end_date={enddate}
+router.get('/movies?status=RELEASED&title=:title&genres=:genres&artists=:artists&start_date=:startdate&end_date=:enddate', movieController.findReleasedMoviesWithFilters);
+
+module.exports = router;
