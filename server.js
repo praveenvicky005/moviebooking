@@ -17,12 +17,24 @@
 // });
 const express = require("express");
 const app = express();
+// import controllers
+const movieController = require('./controllers/movie.controller');
+const genreController = require('./controllers/genre.controller');
+const artistController = require('./controllers/artist.controller');
+const userController = require('./controllers/user.controller');
+app.use(cors({ 
+    origin: 'http://localhost:9000'
+  }));
 app.get("/", (req, res) => {
   res.json({
     message: "Welcome to Upgrad Movie booking application development.",
   });
 });
-
+// use controllers as middleware
+app.use('/api/movies', movieController);
+app.use('/api/genres', genreController);
+app.use('/api/artists', artistController);
+app.use('/api/auth', userController);
 const port = process.env.PORT || 9000;
 
 app.listen(port, () => {

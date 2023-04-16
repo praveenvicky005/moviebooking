@@ -1,6 +1,4 @@
 const Movie = require('../models/movie.model');
-const Show = require('../models/show.model');
-
 // Find all movies by status
 exports.findAllMovies = (req, res) => {
   const status = req.query.status;
@@ -27,15 +25,15 @@ exports.findOne = (req, res) => {
 };
 
 // Find all shows for a specific movie
-exports.findShows = (req, res) => {
-  const id = req.params.id;
-  Show.find({ movieId: id }, (err, shows) => {
-    if (err) {
-      return res.status(500).send({ message: err.message });
-    }
-    if (!shows) {
-      return res.status(404).send({ message: 'Shows not found' });
-    }
-    res.status(200).send(shows);
-  });
-};
+// exports.findShows = (req, res) => {
+//   const id = req.params.id;
+//   Show.find({ movieId: id }, (err, shows) => {
+//     if (err) {
+//       return res.status(500).send({ message: err.message });
+//     }
+//     if (!shows) {
+//       return res.status(404).send({ message: 'Shows not found' });
+//     }
+//     res.status(200).send(shows);
+//   });
+// };
